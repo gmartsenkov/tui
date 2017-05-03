@@ -2,8 +2,13 @@ name: tui
 version: 0.1.0
 
 authors:
-  -  <>
+  -  Georgi Martsenkov
 
 crystal: 0.22.0
+
+dependencies:
+    ncurses:
+      github: agatan/ncurses.cr
+      branch: master
 
 license: MIT

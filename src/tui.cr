@@ -1,3 +1,4 @@
+require "ncurses"
 require "./tui/*"
 
 module Tui

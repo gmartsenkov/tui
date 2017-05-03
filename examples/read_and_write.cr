@@ -1,3 +1,4 @@
+require "../src/tui"
 Tui.init
 Tui.noecho
 

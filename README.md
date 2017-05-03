@@ -9,7 +9,7 @@ Add this to your application's `shard.yml`:
 ```yaml
 dependencies:
   tui:
-    github: [your-github-name]/tui
+    github: gmartsenkov/tui
 ```
 
 ## Usage
