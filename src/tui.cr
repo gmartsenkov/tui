@@ -4,7 +4,7 @@ require "./tui/*"
 module Tui
   extend self
   @@windows = [] of Tui::Window
-  @@refresh_channel = Channel(Nil).new
+  @@refresh_channel = Channel(Tui::Refresh).new
 
   def init
     NCurses.init
@@ -12,7 +12,9 @@ module Tui
 
   def main_loop()
     loop do
-      @@refresh_channel.receive
+      refresh = @@refresh_channel.receive
+      #sleep refresh.delay
+      #refresh.refresh_object.refresh
       windows.each(&.refresh)
     end
   end

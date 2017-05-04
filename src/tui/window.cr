@@ -1,7 +1,7 @@
 module Tui
   class Window
     getter buffer
-    def initialize(@name : String, @dimension : Tui::Dimension, @refresh_channel : Channel(Nil))
+    def initialize(@name : String, @dimension : Tui::Dimension, @refresh_channel : Channel(Tui::Refresh))
       @ncurse_window = NCurses::Window.new(
         x: @dimension.x,
         y: @dimension.y,
@@ -18,21 +18,30 @@ module Tui
 
     def print_buffer
       ncurse_window.mvaddstr(string_buffer, x: 1, y: 1)
-      @refresh_channel.send(nil)
+      @refresh_channel.send(refresh_object(0))
+    end
+
+    private def refresh_object(delay : Int32)
+      Tui::Refresh.new(delay, self)
     end
 
     def print(string : String)
       ncurse_window.mvaddstr(string, x: 1, y: 1)
-      @refresh_channel.send(nil)
+      @refresh_channel.send(refresh_object(0))
     end
 
-    def read
+    def read(delay : Int)
       while ((x = ncurse_window.getch))
-        next if x == -1
-        @buffer << x
-        if x == 10
-          ncurse_window.erase
-          break
+        if x == -1
+          Tui.windows.each do |win|
+            @refresh_channel.send(Tui::Refresh.new(0, win))
+          end
+        else
+          @buffer << x
+          if x == 10
+            @refresh_channel.send(refresh_object(0))
+            break
+          end
         end
       end
     end
