@@ -27,6 +27,10 @@ module Tui
     @@windows
   end
 
+  def refresh_channel
+    @@refresh_channel
+  end
+
   def cbreak
     NCurses.cbreak
   end

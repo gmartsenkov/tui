@@ -33,9 +33,7 @@ module Tui
     def read(delay : Int)
       while ((x = ncurse_window.getch))
         if x == -1
-          Tui.windows.each do |win|
-            @refresh_channel.send(Tui::Refresh.new(0, win))
-          end
+          @refresh_channel.send(refresh_object(0))
         else
           @buffer << x
           if x == 10
@@ -46,7 +44,7 @@ module Tui
       end
     end
 
-    private def string_buffer
+    def string_buffer
       @buffer.map do |byte|
         x = byte.to_i
         next if x == 10
